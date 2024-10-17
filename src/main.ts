@@ -5,7 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe())
+  // transform :把参数转为 dto 的实例
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
   await app.listen(process.env.PORT ?? 3000);
 }
