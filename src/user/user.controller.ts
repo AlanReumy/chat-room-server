@@ -42,7 +42,6 @@ export class UserController {
     return '发送成功';
   }
 
-
   @Post('login')
   async userLogin(@Body() loginUser: LoginUserDto) {
     const user = await this.userService.login(loginUser);
@@ -57,7 +56,6 @@ export class UserController {
       })
     }
   }
-
 
   @Get('info')
   @RequireLogin()

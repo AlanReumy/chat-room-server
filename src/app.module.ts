@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
+import { FriendshipModule } from './friendship/friendship.module';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { AuthGuard } from './guards/auth.guard';
           }
         }
       }
-    })],
+    }), FriendshipModule],
   controllers: [AppController],
   providers: [AppService, PrismaService, {
     provide: APP_GUARD,
