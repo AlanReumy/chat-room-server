@@ -6,14 +6,14 @@ import { createTransport, Transporter } from 'nodemailer';
 export class EmailService {
   transporter: Transporter
 
-  constructor() {
+  constructor(private configService: ConfigService) {
     this.transporter = createTransport({
       host: "smtp.qq.com",
       port: 587,
       secure: false,
       auth: {
-        user: '',
-        pass: ''
+        user: this.configService.get('EMAIL_ADDRESS'),
+        pass: this.configService.get('EMAIL_PASS')
       },
     });
   }
@@ -21,8 +21,8 @@ export class EmailService {
   async sendMail({ to, subject, html }) {
     await this.transporter.sendMail({
       from: {
-        name: '聊天室',
-        address: ''
+        name: this.configService.get('EMAIL_NAME'),
+        address: this.configService.get('EMAIL_ADDRESS')
       },
       to,
       subject,

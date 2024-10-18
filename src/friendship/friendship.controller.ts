@@ -13,12 +13,14 @@ export class FriendshipController {
     return this.friendshipService.add(friendAddDto, userId);
   }
 
-  @Get('request_list')
+  @Get('request-list')
+  @RequireLogin()
   async list(@UserInfo("userId") userId: number) {
     return this.friendshipService.list(userId);
   }
 
   @Get('agree/:id')
+  @RequireLogin()
   async agree(@Param('id') friendId: number, @UserInfo("userId") userId: number) {
     if (!friendId) {
       throw new BadRequestException('添加的好友 id 不能为空');
@@ -27,7 +29,9 @@ export class FriendshipController {
   }
 
   @Get('reject/:id')
+  @RequireLogin()
   async reject(@Param('id') friendId: number, @UserInfo("userId") userId: number) {
+    console.log(friendId, userId, 999);
     if (!friendId) {
       throw new BadRequestException('添加的好友 id 不能为空');
     }
@@ -35,11 +39,13 @@ export class FriendshipController {
   }
 
   @Get('remove/:id')
+  @RequireLogin()
   async remove(@Param('id') friendId: number, @UserInfo('userId') userId: number) {
     return this.friendshipService.remove(friendId, userId);
   }
 
   @Get('list')
+  @RequireLogin()
   async friendship(@UserInfo('userId') userId: number) {
     return this.friendshipService.getFriendship(userId);
   }

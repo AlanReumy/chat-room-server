@@ -63,9 +63,26 @@ export class UserController {
     return this.userService.findUserDetailById(userId);
   }
 
-  @Post('update_password')
+  @Post('update-password')
   async updatePassword(@Body() passwordDto: UpdateUserPasswordDto) {
     return this.userService.updatePassword(passwordDto);
+  }
+
+  @Get('update-password-captcha')
+  async updatePasswordCaptcha(@Query('address') address: string) {
+    if (!address) {
+      throw new BadRequestException('邮箱地址不能为空');
+    }
+    const code = Math.random().toString().slice(2, 8);
+
+    await this.redisService.set(`update_password_captcha_${address}`, code, 10 * 60);
+
+    await this.emailService.sendMail({
+      to: address,
+      subject: '更改用户信息验证码',
+      html: `<p>你的验证码是 ${code}</p>`
+    });
+    return '发送成功';
   }
 
   @Post('update')
@@ -74,7 +91,7 @@ export class UserController {
     return await this.userService.update(userId, updateUserDto);
   }
 
-  @Get('update/captcha')
+  @Get('update-captcha')
   async updateCaptcha(@Query('address') address: string) {
     if (!address) {
       throw new BadRequestException('邮箱地址不能为空');

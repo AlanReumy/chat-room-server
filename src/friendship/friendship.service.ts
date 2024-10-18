@@ -57,7 +57,7 @@ export class FriendshipService {
   }
 
   async reject(friendId: number, userId: number) {
-    await this.prismaService.friendRequest.updateMany({
+    const res = await this.prismaService.friendRequest.updateMany({
       where: {
         fromUserId: friendId,
         toUserId: userId,
@@ -67,6 +67,9 @@ export class FriendshipService {
         status: 2
       }
     })
+    if (res.count === 0) {
+      return '没有找到该好友申请'
+    }
     return '已拒绝'
   }
 
